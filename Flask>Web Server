@@ -1,0 +1,36 @@
+# app.py - Flask application for virtual tours and AI chatbots
+
+from flask import Flask, request, jsonify, render_template
+from your_chatbot_library import generate_chatbot_response  # Assume custom chatbot function
+import json
+
+app = Flask(__name__)
+
+# Route for homepage
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+# Virtual Property Tour Page
+@app.route('/virtual-tour')
+def virtual_tour():
+    return render_template('tour.html')  # HTML file with virtual tour iframe embedded
+
+# Route for AI-driven chatbot responses
+@app.route('/chatbot', methods=['POST'])
+def chatbot():
+    user_input = request.json.get('message')
+    bot_response = generate_chatbot_response(user_input)
+    return jsonify({"response": bot_response})
+
+# Example chatbot response function
+def generate_chatbot_response(user_input):
+    # AI logic or call to an NLP model here
+    if "price" in user_input.lower():
+        return "Our property prices vary. Please visit the listings page for details."
+    elif "tour" in user_input.lower():
+        return "Check out our virtual tours under the 'Virtual Tour' section for an immersive experience!"
+    return "I'm here to help with any inquiries about our properties!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
